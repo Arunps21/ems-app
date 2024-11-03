@@ -1,7 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
+import { Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
+import USerImg from '../images/UserImg.jpg'
+
 
 function View() {
     const params = useParams();
@@ -25,34 +29,27 @@ function View() {
 
     return (
       <>
-        <Table striped bordered hover variant="primary" className="mt-3">
-          <thead>
-            <tr className="text-center text-danger">
-              <th className="text-danger">Id</th>
-              <th className="text-danger">Full Name</th>
-              <th className="text-danger">Designation</th>
-              <th className="text-danger">Salary</th>
-              <th className="text-danger">Experience</th>
-            </tr>
-          </thead>
-          <tbody>
+
+        <Container fluid>
+          <h1 className="text-center mt-5">User Details</h1>
+          <Row className="mt-5">
+            <Col lg={6}>
+            <img src={USerImg} alt="User" style={{ width: "100%", height: "70%" }} />            </Col>
+            <Col lg={6}>
             {employee ? (
-              <tr key={employee._id} className="text-center">
-                <td>{employee._id}</td>
-                <td>{employee.name}</td>
-                <td>{employee.des}</td>
-                <td>{employee.sal}</td>
-                <td>{employee.exp}</td>
-              </tr>
-            ) : (
-              <tr>
-                <td colSpan="5" className="text-center">
-                  No data found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
+              <Card style={{ width: '18rem' }} className="mt-5">
+              <ListGroup variant="flush" key={employee._id}>
+                <ListGroup.Item><strong>ID:</strong> {employee._id}</ListGroup.Item>
+                <ListGroup.Item><strong>Name:</strong> {employee.name}</ListGroup.Item>
+                <ListGroup.Item><strong>Designation:</strong> {employee.des}</ListGroup.Item>
+                <ListGroup.Item><strong>Salary:</strong> {employee.sal}</ListGroup.Item>
+                <ListGroup.Item><strong>Experience:</strong> {employee.exp}</ListGroup.Item>
+              </ListGroup>
+            </Card>
+            ):"No data found"}
+            </Col>
+          </Row>
+        </Container>
       </>
     );
 }
