@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Image from "react-bootstrap/Image";
@@ -8,10 +8,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import axios from "axios";
+import Search from "./Search";
+import context from "../ComponentProvider";
 
 function Home() {
   const [get, setGet] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {search} = useContext(context)
 
   const getDetails = async () => {
     try {
@@ -28,9 +31,11 @@ function Home() {
     const ans = window.confirm("Do you want to delete?");
     if (ans) {
       try {
-        const { data } = await axios.delete(`http://localhost:9000/empRouter/delemp/${id}`);
-        alert(data.message                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     );
-        getDetails(); 
+        const { data } = await axios.delete(
+          `http://localhost:9000/empRouter/delemp/${id}`
+        );
+        alert(data.message);
+        getDetails();
       } catch (err) {
         console.log("Error in:", err);
       }
@@ -50,7 +55,7 @@ function Home() {
           <Col lg={6}>
             <div className="container mt-3 p-5 text-center">
               <h1>Employee Management</h1>
-              <p>
+              <p className="p-3">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                 Suscipit distinctio molestiae commodi beatae reiciendis! Sit
                 repellendus, natus eum officia omnis assumenda dolores placeat
@@ -67,7 +72,9 @@ function Home() {
           </Col>
         </Row>
       </div>
-
+      <div >
+        <Search />
+      </div>{" "}
       <div className="container-fluid mt-1 p-3 bg-light">
         <h1 className="text-center">List Of Employees</h1>
         {loading ? (
@@ -77,7 +84,6 @@ function Home() {
             <thead>
               <tr className="text-center text-danger">
                 <th className="text-danger">#</th>
-                <th className="text-danger">Id</th>
                 <th className="text-danger">Full Name</th>
                 <th className="text-danger">Designation</th>
                 <th className="text-danger">Salary</th>
@@ -87,10 +93,12 @@ function Home() {
             </thead>
             <tbody>
               {get.length > 0 ? (
-                get.map((list, index) => (
+                get.filter((filt)=>(
+                  filt.des.toLocaleLowerCase().match(search.toLocaleLowerCase())
+                ))
+                .map((list, index) => (
                   <tr key={list._id} className="text-center">
                     <td>{index + 1}</td>
-                    <td>{list._id}</td>
                     <td>{list.name}</td>
                     <td>{list.des}</td>
                     <td>{list.sal}</td>
